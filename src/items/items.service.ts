@@ -39,7 +39,15 @@ export const create = async (newItem: BaseItem): Promise<Item> => {
   const item: Item = { ...newItem, id };
 
   itemsDb[id] = item;
-  menusDb[item.category].items.push(item.id);
+  
+  if (!menusDb[item.category]) {
+    menusDb[item.category] = {
+      id: item.category,
+      items: [item.id]
+    }
+  } else {
+    menusDb[item.category].items.push(item.id);
+  }
 
   await updateItemsDb(itemsDb);
   await updateMenusDb(menusDb);
